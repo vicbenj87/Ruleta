@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editor del repertorio · Cancionero</title>
+<link rel="stylesheet" href="css/editor.css">
+</head>
+<body>
+
+<!-- ==========================================================================
+     BARRA SUPERIOR
+     ========================================================================== -->
+<header class="cabecera">
+  <h1 class="cabecera__titulo">
+    <small>Cancionero</small>
+    Editor del repertorio
+  </h1>
+
+  <input class="campo" id="buscar" type="search" placeholder="Buscar y saltar (Intro)…"
+         style="width: 200px" autocomplete="off" aria-label="Buscar en títulos y letras">
+
+  <input class="campo" id="ir-fila" type="number" min="1" max="349" placeholder="Ir a la nº…"
+         style="width: 110px" aria-label="Ir a la canción número">
+
+  <span class="separador"></span>
+
+  <label class="interruptor" title="La columna TIPO llega del archivo de datos y se conserva tal cual.">
+    <input type="checkbox" id="editar-tipo"> Editar TIPO
+  </label>
+
+  <button class="boton" id="btn-importar" type="button">Importar canciones</button>
+  <button class="boton" id="btn-revisar" type="button">Revisar</button>
+  <button class="boton" id="btn-exportar-json" type="button">Exportar .json</button>
+  <button class="boton boton--principal" id="btn-exportar-js" type="button">Exportar canciones.js</button>
+</header>
+
+<div class="aviso" id="aviso-borrador">
+  <span id="aviso-borrador-texto"></span>
+  <span class="separador"></span>
+  <button class="boton boton--sutil boton--peligro" id="btn-vaciar-todo" type="button">Empezar de cero</button>
+</div>
+
+<div class="cabecera" style="padding: 8px 16px">
+  <span class="estado" id="estado"></span>
+  <span class="separador"></span>
+  <span class="estado" id="guardado">Borrador automático activo</span>
+</div>
+
+<!-- ==========================================================================
+     CUADRÍCULA · fila 1 = cabecera · filas 2–350 = las 349 canciones
+     Solo existen en el DOM las filas visibles.
+     ========================================================================== -->
+<div class="rejilla" id="rejilla" tabindex="0">
+  <div class="rejilla__cabecera" id="rejilla-cabecera" role="row"></div>
+  <div class="rejilla__cuerpo" id="rejilla-cuerpo"></div>
+</div>
+
+<!-- ==========================================================================
+     CAJÓN · edición cómoda de una canción
+     ========================================================================== -->
+<div class="fondo-cajon" id="fondo-cajon" data-visible="false"></div>
+
+<aside class="cajon" id="cajon" data-abierto="false" aria-label="Edición de la canción">
+  <div class="cajon__cabecera">
+    <h2 class="cajon__titulo" id="cajon-titulo"></h2>
+    <span class="separador"></span>
+    <button class="boton boton--sutil" id="cerrar-cajon" type="button">Cerrar</button>
+  </div>
+
+  <div class="cajon__cuerpo" id="cajon-cuerpo"></div>
+
+  <div class="cajon__pie">
+    <button class="boton boton--principal" id="btn-repartir" type="button">Pegar letra y repartirla</button>
+    <span class="separador"></span>
+    <button class="boton boton--sutil boton--peligro" id="btn-vaciar-fila" type="button">Vaciar esta canción</button>
+  </div>
+</aside>
+
+<!-- ==========================================================================
+     DIÁLOGO · importar
+     ========================================================================== -->
+<div class="dialogo" id="dlg-importar" role="dialog" aria-labelledby="titulo-importar">
+  <div class="dialogo__caja">
+    <h2 class="dialogo__titulo" id="titulo-importar">Importar canciones</h2>
+    <p class="dialogo__ayuda">
+      Carga el <code>canciones.js</code> que ya tengas publicado, o el <code>canciones.json</code>
+      exportado desde aquí. Cada canción vuelve a su número original; las que no quepan se descartan.
+      <strong>Sustituye todo el contenido actual de la tabla.</strong>
+    </p>
+
+    <p><input type="file" id="archivo" accept=".js,.json,.txt"></p>
+    <textarea id="texto-importado" placeholder="…o pega aquí el contenido del archivo"></textarea>
+    <p class="previsualizacion" data-error="true" id="error-importar"></p>
+
+    <div class="acciones-dialogo">
+      <button class="boton boton--sutil" type="button" data-cerrar="dlg-importar">Cancelar</button>
+      <button class="boton boton--principal" id="confirmar-importar" type="button">Importar y reemplazar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     DIÁLOGO · repartir letra
+     ========================================================================== -->
+<div class="dialogo" id="dlg-reparto" role="dialog" aria-labelledby="titulo-reparto">
+  <div class="dialogo__caja">
+    <h2 class="dialogo__titulo" id="titulo-reparto">Pegar letra y repartirla</h2>
+    <p class="dialogo__ayuda">
+      Copia la letra completa y pégala aquí. Se reparte entre las 22 diapositivas de la canción
+      abierta, y lo que ya hubiera en ellas se sustituye.
+    </p>
+
+    <textarea id="letra-pegada" placeholder="Pega aquí la letra completa…"></textarea>
+
+    <div class="opciones">
+      <label><input type="radio" name="modo" value="blanco" checked> Separar por línea en blanco</label>
+      <label><input type="radio" name="modo" value="lineas"> Cada
+        <input class="campo" id="lineas-por-bloque" type="number" min="1" max="12" value="4"
+               style="width: 62px" aria-label="Líneas por diapositiva"> líneas</label>
+      <label><input type="radio" name="modo" value="marca"> Separar por <code>---</code></label>
+      <label><input type="checkbox" id="unir-sobrante" checked> Unir el sobrante en la última</label>
+    </div>
+
+    <p class="previsualizacion" id="previsualizacion"></p>
+
+    <div class="acciones-dialogo">
+      <button class="boton boton--sutil" type="button" data-cerrar="dlg-reparto">Cancelar</button>
+      <button class="boton boton--principal" id="aplicar-reparto" type="button" disabled>Repartir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     DIÁLOGO · revisión
+     ========================================================================== -->
+<div class="dialogo" id="dlg-revision" role="dialog" aria-labelledby="titulo-revision">
+  <div class="dialogo__caja">
+    <h2 class="dialogo__titulo" id="titulo-revision">Revisión antes de publicar</h2>
+    <p class="dialogo__ayuda">
+      Nada de esto impide exportar: son avisos para que no se cuele una canción sin título
+      o una estrofa que se verá diminuta en la pantalla.
+    </p>
+    <ul class="informe" id="informe"></ul>
+    <div class="acciones-dialogo">
+      <button class="boton boton--principal" type="button" data-cerrar="dlg-revision">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/editor.js"></script>
+</body>
+</html>
