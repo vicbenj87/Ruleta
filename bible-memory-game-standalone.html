@@ -1,0 +1,2620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memoriza la Palabra · Versículos Bíblicos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Luckiest+Guy&display=swap" rel="stylesheet" />
+  
+  
+  
+  
+<style>/* ══════════════════════════════════════════
+   BASE.CSS – Variables · Reset · Layout
+   ══════════════════════════════════════════ */
+
+:root {
+  /* Palette – Vibrante + espiritual */
+  --c-bg:        #0f0a2e;
+  --c-surface:   #1a1247;
+  --c-card:      #211860;
+  --c-card2:     #2a1f78;
+
+  --c-gold:      #ffd166;
+  --c-gold-dark: #e8a000;
+  --c-purple:    #a855f7;
+  --c-violet:    #7c3aed;
+  --c-pink:      #ec4899;
+  --c-teal:      #14b8a6;
+  --c-sky:       #38bdf8;
+  --c-green:     #22c55e;
+  --c-red:       #ef4444;
+  --c-orange:    #f97316;
+
+  --c-text:      #f1f0ff;
+  --c-text-dim:  #9d95c9;
+  --c-border:    rgba(168,85,247,.25);
+
+  /* Sizing */
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-xl:   36px;
+
+  /* Shadows */
+  --shadow-glow-gold:   0 0 30px rgba(255,209,102,.35);
+  --shadow-glow-purple: 0 0 30px rgba(168,85,247,.35);
+  --shadow-card:        0 8px 32px rgba(0,0,0,.45);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Screens ── */
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0 16px 40px;
+  position: relative;
+  z-index: 1;
+}
+.screen.active { display: flex; }
+
+/* ── Particles background ── */
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .18;
+  animation: floatUp var(--dur, 12s) var(--delay, 0s) infinite linear;
+}
+
+/* ── Generic Button Styles ── */
+.btn-primary {
+  background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
+  color: #1a0a00;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 14px 32px;
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255,180,0,.4);
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,180,0,.5); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--c-text-dim);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 13px 28px;
+  border: 2px solid var(--c-border);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+}
+.btn-secondary:hover { border-color: var(--c-purple); color: var(--c-text); }
+
+/* ── Utility ── */
+.hidden { display: none !important; }
+
+/* ── Gradient text helper ── */
+.gradient-text {
+  background: linear-gradient(90deg, var(--c-gold), var(--c-pink), var(--c-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--c-surface); }
+::-webkit-scrollbar-thumb { background: var(--c-violet); border-radius: 99px; }
+
+/* ── Selection ── */
+::selection { background: rgba(168,85,247,.35); color: var(--c-text); }
+
+/* ── Focus outlines ── */
+:focus-visible {
+  outline: 2px solid var(--c-purple);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Star field decoration ── */
+#particles::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(124,58,237,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(236,72,153,.1) 0%, transparent 55%);
+  pointer-events: none;
+}
+/* ══════════════════════════════════════════
+   ANIMATIONS.CSS – Keyframes & Motion
+   ══════════════════════════════════════════ */
+
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) scale(.4); opacity: 0; }
+  10%  { opacity: .18; }
+  90%  { opacity: .12; }
+  100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+}
+
+@keyframes spinGlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: .6; transform: scale(1); }
+  50%       { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes pointerBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(-6px); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: rotateY(-18deg) scale(.94); }
+  to   { opacity: 1; transform: rotateY(0) scale(1); }
+}
+
+@keyframes feedbackPop {
+  from { opacity: 0; transform: scale(.75); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounceIn {
+  0%   { transform: scale(.3) rotate(-15deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(5deg); }
+  80%  { transform: scale(.95) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+@keyframes timerPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+
+@keyframes shakeWrong {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-7px); }
+  40%       { transform: translateX(7px); }
+  60%       { transform: translateX(-5px); }
+  80%       { transform: translateX(5px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255,209,102,.3); }
+  50%       { box-shadow: 0 0 40px rgba(255,209,102,.7); }
+}
+
+@keyframes confettiDrop {
+  from { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  to   { transform: translateY(60px) rotate(360deg); opacity: 0; }
+}
+
+/* ── Utility animation classes ── */
+.anim-shake { animation: shakeWrong .45s ease; }
+.anim-glow  { animation: glowPulse 1s ease; }
+.anim-bounce { animation: bounceIn .5s cubic-bezier(.34,1.56,.64,1); }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+/* ══════════════════════════════════════════
+   ROULETTE.CSS – Home screen & Wheel
+   ══════════════════════════════════════════ */
+
+/* ── Header ── */
+.home-header {
+  text-align: center;
+  padding: 40px 0 20px;
+}
+.home-logo {
+  font-size: 2.8rem;
+  color: var(--c-gold);
+  animation: spinGlow 6s linear infinite;
+  display: inline-block;
+  text-shadow: var(--shadow-glow-gold);
+}
+.home-title {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: 2px;
+  color: var(--c-text);
+  margin-top: 8px;
+}
+.home-title span {
+  background: linear-gradient(90deg, var(--c-gold), var(--c-pink), var(--c-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.home-subtitle {
+  font-size: 1rem;
+  color: var(--c-text-dim);
+  margin-top: 10px;
+  max-width: 340px;
+  margin-inline: auto;
+  line-height: 1.5;
+}
+
+/* ── Roulette wrapper ── */
+.roulette-wrapper {
+  position: relative;
+  width: min(420px, 90vw);
+  height: min(420px, 90vw);
+  margin: 28px auto 24px;
+}
+
+/* Ambient glow behind wheel */
+.roulette-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,85,247,.25) 0%, transparent 70%);
+  animation: pulseGlow 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Canvas wheel */
+#roulette-canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  filter: drop-shadow(0 0 24px rgba(168,85,247,.5));
+}
+
+/* Center spin button */
+.roulette-center-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff 0%, var(--c-gold) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0,0,0,.6), 0 0 0 4px rgba(255,255,255,.15);
+  transition: transform .15s, box-shadow .15s;
+  user-select: none;
+  z-index: 10;
+}
+.roulette-center-btn:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 6px 30px rgba(0,0,0,.7), 0 0 0 6px rgba(255,220,80,.3);
+}
+.roulette-center-btn.spinning {
+  pointer-events: none;
+  opacity: .7;
+}
+.spin-icon {
+  font-size: 1.3rem;
+  color: var(--c-bg);
+  line-height: 1;
+}
+.spin-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: .62rem;
+  letter-spacing: 1.5px;
+  color: var(--c-bg);
+}
+
+/* Pointer arrow */
+.roulette-pointer {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: var(--c-gold);
+  text-shadow: 0 0 12px var(--c-gold);
+  animation: pointerBounce 1.2s ease-in-out infinite;
+  z-index: 20;
+}
+
+/* Result banner */
+.roulette-result {
+  text-align: center;
+  background: linear-gradient(135deg, var(--c-card), var(--c-card2));
+  border: 2px solid var(--c-gold);
+  border-radius: var(--radius-lg);
+  padding: 18px 28px;
+  max-width: 380px;
+  box-shadow: var(--shadow-glow-gold);
+  animation: slideUp .4s cubic-bezier(.34,1.56,.64,1);
+}
+.roulette-result h3 {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.3rem;
+  color: var(--c-gold);
+  letter-spacing: 1px;
+}
+.roulette-result p {
+  color: var(--c-text);
+  font-size: .9rem;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+/* ══════════════════════════════════════════
+   EXERCISES.CSS – Cards, Inputs, Feedback
+   ══════════════════════════════════════════ */
+
+/* ── Top bar ── */
+.ex-topbar {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0 10px;
+  flex-wrap: wrap;
+}
+.btn-home {
+  background: rgba(168,85,247,.15);
+  border: 1.5px solid var(--c-border);
+  color: var(--c-text-dim);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .85rem;
+  padding: 8px 14px;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  white-space: nowrap;
+}
+.btn-home:hover { background: rgba(168,85,247,.3); color: var(--c-text); }
+
+.ex-verse-ref {
+  flex: 1;
+  text-align: center;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.15rem;
+  color: var(--c-gold);
+  letter-spacing: 1px;
+}
+.ex-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.ex-progress-wrap span {
+  font-size: .8rem;
+  color: var(--c-text-dim);
+  font-weight: 700;
+}
+.ex-progress-bar {
+  width: 90px;
+  height: 7px;
+  background: rgba(255,255,255,.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.ex-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-purple), var(--c-gold));
+  border-radius: 99px;
+  transition: width .5s ease;
+}
+
+/* ── Score bar ── */
+.ex-scorebar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.score-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 99px;
+  font-weight: 800;
+  font-size: .9rem;
+}
+.score-pill.correct { background: rgba(34,197,94,.15); color: var(--c-green); border: 1.5px solid rgba(34,197,94,.3); }
+.score-pill.wrong   { background: rgba(239,68,68,.15); color: var(--c-red); border: 1.5px solid rgba(239,68,68,.3); }
+
+/* ── Timer ── */
+.timer-wrap {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 12px;
+}
+.timer-svg { width: 72px; height: 72px; transform: rotate(-90deg); }
+.timer-bg  { fill: none; stroke: rgba(255,255,255,.1); stroke-width: 5; }
+.timer-ring {
+  fill: none;
+  stroke: var(--c-teal);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset .9s linear, stroke .3s;
+}
+.timer-ring.urgent { stroke: var(--c-red); }
+.timer-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: var(--c-text);
+}
+
+/* ── Card area ── */
+.card-area {
+  width: 100%;
+  max-width: 680px;
+  min-height: 380px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+/* ── Exercise Card ── */
+.ex-card {
+  width: 100%;
+  background: linear-gradient(160deg, var(--c-card) 0%, var(--c-card2) 100%);
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 24px;
+  box-shadow: var(--shadow-card);
+  animation: cardIn .45s cubic-bezier(.34,1.56,.64,1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.ex-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--c-purple), var(--c-gold), var(--c-pink));
+}
+
+.ex-card-label {
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+  background: rgba(168,85,247,.12);
+  padding: 4px 12px;
+  border-radius: 99px;
+  width: fit-content;
+}
+
+.ex-card-instruction {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--c-text-dim);
+  line-height: 1.45;
+}
+
+/* Verse display */
+.verse-display {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--c-text);
+  font-weight: 600;
+  word-break: break-word;
+}
+.verse-display .blank {
+  display: inline-block;
+  min-width: 80px;
+  border-bottom: 3px solid var(--c-gold);
+  margin: 0 4px;
+  vertical-align: bottom;
+  text-align: center;
+  color: var(--c-gold);
+  font-weight: 800;
+}
+.verse-display .blank-input {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid var(--c-gold);
+  color: var(--c-gold);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-align: center;
+  width: 90px;
+  outline: none;
+  padding: 2px 6px;
+  margin: 0 4px;
+  vertical-align: bottom;
+}
+.verse-display .blank-input:focus { border-color: var(--c-sky); }
+
+/* ── Multiple choice ── */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.options-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.option-btn {
+  background: rgba(255,255,255,.05);
+  border: 2px solid var(--c-border);
+  color: var(--c-text);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .92rem;
+  padding: 12px 10px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .12s;
+  text-align: center;
+}
+.option-btn:hover { background: rgba(168,85,247,.2); border-color: var(--c-purple); transform: scale(1.02); }
+.option-btn.selected-correct { background: rgba(34,197,94,.25); border-color: var(--c-green); color: var(--c-green); }
+.option-btn.selected-wrong   { background: rgba(239,68,68,.25); border-color: var(--c-red); color: var(--c-red); }
+
+/* Multi-select option style */
+.option-pair {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Text inputs ── */
+.write-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.write-inputs input {
+  background: rgba(255,255,255,.07);
+  border: 2px solid var(--c-border);
+  border-radius: var(--radius-md);
+  color: var(--c-text);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color .2s, background .2s;
+}
+.write-inputs input:focus { border-color: var(--c-purple); background: rgba(168,85,247,.1); }
+.write-inputs input.correct { border-color: var(--c-green); background: rgba(34,197,94,.12); }
+.write-inputs input.wrong   { border-color: var(--c-red); background: rgba(239,68,68,.12); }
+
+/* Submit button inside cards */
+.btn-submit {
+  background: linear-gradient(135deg, var(--c-violet), var(--c-purple));
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 13px 26px;
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  align-self: center;
+  width: 100%;
+  max-width: 280px;
+  box-shadow: 0 4px 20px rgba(124,58,237,.4);
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(124,58,237,.5); }
+.btn-submit:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+/* ── Drag & Drop tokens ── */
+.token-phrase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0px;
+  min-height: 48px;
+  padding: 10px 8px;
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius-md);
+  border: 1.5px dashed var(--c-border);
+  align-items: center;
+  position: relative;
+}
+.token-phrase.drag-over { border-color: var(--c-purple); background: rgba(168,85,247,.1); }
+
+.drop-zone {
+  width: 8px;
+  min-height: 40px;
+  border-radius: 4px;
+  transition: width .15s, background .15s;
+  flex-shrink: 0;
+}
+.drop-zone.active { width: 56px; background: rgba(168,85,247,.3); border: 2px dashed var(--c-purple); }
+
+.token-block {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: .95rem;
+  cursor: grab;
+  user-select: none;
+  white-space: nowrap;
+  transition: box-shadow .15s, transform .12s;
+  position: relative;
+}
+.token-block:active { cursor: grabbing; transform: scale(1.05); }
+.token-block.word { background: rgba(56,189,248,.15); border: 1.5px solid rgba(56,189,248,.3); color: var(--c-sky); }
+.token-block.num  { background: rgba(255,209,102,.15); border: 1.5px solid rgba(255,209,102,.3); color: var(--c-gold); }
+.token-block.dragging { opacity: .3; }
+
+/* Tray for displaced tokens */
+.token-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--c-gold);
+  min-height: 58px;
+  justify-content: center;
+}
+.token-tray .token-block { cursor: grab; }
+.tray-label {
+  font-size: .75rem;
+  color: var(--c-text-dim);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* ── Intruder tokens ── */
+.intruder-phrase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius-md);
+  min-height: 58px;
+  align-items: center;
+}
+.intruder-token {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .15s, opacity .2s;
+  border: 1.5px solid transparent;
+}
+.intruder-token:hover { transform: scale(1.06); box-shadow: 0 4px 16px rgba(168,85,247,.3); }
+.intruder-token.word { background: rgba(56,189,248,.15); border-color: rgba(56,189,248,.3); color: var(--c-sky); }
+.intruder-token.num  { background: rgba(255,209,102,.15); border-color: rgba(255,209,102,.3); color: var(--c-gold); }
+.intruder-token.eliminated { opacity: .3; text-decoration: line-through; cursor: default; pointer-events: none; }
+.intruder-token.wrong-elim { border-color: var(--c-red); background: rgba(239,68,68,.2); }
+
+/* ── True / False ── */
+.tf-verse {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--c-text);
+  font-weight: 600;
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+.tf-buttons {
+  display: flex;
+  gap: 14px;
+}
+.tf-btn {
+  flex: 1;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .15s;
+}
+.tf-btn.true-btn  { background: rgba(34,197,94,.15); border-color: rgba(34,197,94,.35); color: var(--c-green); }
+.tf-btn.false-btn { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.35); color: var(--c-red); }
+.tf-btn:hover { transform: scale(1.04); }
+.tf-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+/* ── Feedback overlay ── */
+.feedback-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+.feedback-box {
+  background: linear-gradient(160deg, var(--c-card), var(--c-card2));
+  border-radius: var(--radius-lg);
+  padding: 32px 36px;
+  text-align: center;
+  max-width: 360px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  animation: feedbackPop .35s cubic-bezier(.34,1.56,.64,1);
+}
+.feedback-icon { font-size: 3.2rem; margin-bottom: 10px; }
+.feedback-msg  { font-weight: 800; font-size: 1.25rem; margin-bottom: 8px; }
+.feedback-msg.correct { color: var(--c-green); }
+.feedback-msg.wrong   { color: var(--c-red); }
+.feedback-answer {
+  font-size: .92rem;
+  color: var(--c-text-dim);
+  line-height: 1.5;
+}
+.feedback-answer strong { color: var(--c-gold); }
+
+/* ── Results screen ── */
+.results-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 50px 20px 60px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+.results-trophy { font-size: 4.5rem; animation: bounceIn .6s cubic-bezier(.34,1.56,.64,1); }
+.results-title {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 2.5rem;
+  color: var(--c-gold);
+  letter-spacing: 2px;
+  text-shadow: var(--shadow-glow-gold);
+}
+.results-verse-ref { font-weight: 800; font-size: 1.1rem; color: var(--c-purple); }
+.results-stats { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.stat-card {
+  background: linear-gradient(160deg, var(--c-card), var(--c-card2));
+  border: 1.5px solid var(--c-border);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+  min-width: 100px;
+}
+.stat-card.correct { border-color: rgba(34,197,94,.3); }
+.stat-card.wrong   { border-color: rgba(239,68,68,.3); }
+.stat-card.score   { border-color: rgba(255,209,102,.3); }
+.stat-num { display: block; font-family: 'Luckiest Guy', cursive; font-size: 2rem; }
+.stat-card.correct .stat-num { color: var(--c-green); }
+.stat-card.wrong   .stat-num { color: var(--c-red); }
+.stat-card.score   .stat-num { color: var(--c-gold); }
+.stat-label { font-size: .8rem; font-weight: 700; color: var(--c-text-dim); letter-spacing: .5px; }
+.results-verse-text {
+  font-size: .92rem;
+  color: var(--c-text-dim);
+  line-height: 1.6;
+  font-style: italic;
+  background: rgba(255,255,255,.04);
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--c-purple);
+}
+.results-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+/* ── Exercise number badge ── */
+.ex-num-badge {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--c-border);
+  color: var(--c-text-dim);
+  font-weight: 800;
+  font-size: .72rem;
+  padding: 3px 10px;
+  border-radius: 99px;
+  letter-spacing: 1px;
+}
+
+/* ── Group badge colors ── */
+.timer-badge-none   { background: rgba(56,189,248,.15); color: var(--c-sky); border: 1px solid rgba(56,189,248,.3); }
+.timer-badge-20     { background: rgba(249,115,22,.15); color: var(--c-orange); border: 1px solid rgba(249,115,22,.3); }
+.timer-badge-10     { background: rgba(239,68,68,.15); color: var(--c-red); border: 1px solid rgba(239,68,68,.3); }
+
+/* ── Write input labels ── */
+.write-field-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.write-field-wrap label {
+  font-size: .75rem;
+  color: var(--c-text-dim);
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+/* ── Full verse reference display at bottom of card ── */
+.card-verse-ref {
+  font-size: .75rem;
+  color: var(--c-text-dim);
+  font-weight: 700;
+  text-align: right;
+  margin-top: 4px;
+  letter-spacing: .5px;
+}
+
+/* ── Drag hint ── */
+.drag-hint {
+  font-size: .78rem;
+  color: var(--c-text-dim);
+  text-align: center;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 520px) {
+  .ex-topbar { gap: 8px; }
+  .ex-card   { padding: 20px 16px 18px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .tf-buttons { flex-direction: column; }
+  .results-stats { gap: 10px; }
+  .stat-card { min-width: 80px; padding: 14px 14px; }
+  .home-title { font-size: 2rem; }
+  .roulette-wrapper { width: min(360px, 88vw); height: min(360px, 88vw); }
+}
+</style>
+</head>
+<body>
+
+  <!-- ── PARTICLES BACKGROUND ── -->
+  <div id="particles" aria-hidden="true"></div>
+
+  <!-- ── SCREEN: HOME / ROULETTE ── -->
+  <section id="screen-home" class="screen active">
+    <header class="home-header">
+      <div class="home-logo">✦</div>
+      <h1 class="home-title">Memoriza<br/><span>la Palabra</span></h1>
+      <p class="home-subtitle">Gira la ruleta y pon a prueba tu memoria bíblica</p>
+    </header>
+
+    <div class="roulette-wrapper">
+      <div class="roulette-glow" aria-hidden="true"></div>
+      <canvas id="roulette-canvas" width="420" height="420" role="img" aria-label="Ruleta de versículos bíblicos"></canvas>
+      <div class="roulette-center-btn" id="spin-btn" role="button" tabindex="0" aria-label="Girar la ruleta">
+        <span class="spin-icon">▶</span>
+        <span class="spin-label">GIRAR</span>
+      </div>
+      <div class="roulette-pointer" aria-hidden="true">▼</div>
+    </div>
+
+    <div id="roulette-result" class="roulette-result hidden" aria-live="polite"></div>
+  </section>
+
+  <!-- ── SCREEN: EXERCISES ── -->
+  <section id="screen-exercises" class="screen">
+    <!-- Top bar -->
+    <div class="ex-topbar">
+      <button class="btn-home" id="btn-back-home" aria-label="Volver al inicio">⬅ Inicio</button>
+      <div class="ex-verse-ref" id="ex-verse-ref"></div>
+      <div class="ex-progress-wrap">
+        <span id="ex-counter">1 / 20</span>
+        <div class="ex-progress-bar"><div class="ex-progress-fill" id="ex-progress-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- Score bar -->
+    <div class="ex-scorebar">
+      <div class="score-pill correct"><span>✓</span><span id="score-correct">0</span></div>
+      <div class="score-pill wrong"><span>✗</span><span id="score-wrong">0</span></div>
+    </div>
+
+    <!-- Timer ring -->
+    <div class="timer-wrap hidden" id="timer-wrap" aria-live="polite">
+      <svg class="timer-svg" viewBox="0 0 72 72">
+        <circle class="timer-bg" cx="36" cy="36" r="30"/>
+        <circle class="timer-ring" id="timer-ring" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5" stroke-dashoffset="0"/>
+      </svg>
+      <span class="timer-num" id="timer-num">20</span>
+    </div>
+
+    <!-- Card area -->
+    <div class="card-area" id="card-area"></div>
+
+    <!-- Feedback overlay -->
+    <div class="feedback-overlay hidden" id="feedback-overlay">
+      <div class="feedback-box" id="feedback-box">
+        <div class="feedback-icon" id="feedback-icon"></div>
+        <div class="feedback-msg" id="feedback-msg"></div>
+        <div class="feedback-answer" id="feedback-answer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SCREEN: RESULTS ── -->
+  <section id="screen-results" class="screen">
+    <div class="results-wrap">
+      <div class="results-trophy">🏆</div>
+      <h2 class="results-title">¡Completado!</h2>
+      <div class="results-verse-ref" id="results-verse-ref"></div>
+      <div class="results-stats">
+        <div class="stat-card correct">
+          <span class="stat-num" id="res-correct">0</span>
+          <span class="stat-label">Correctas</span>
+        </div>
+        <div class="stat-card wrong">
+          <span class="stat-num" id="res-wrong">0</span>
+          <span class="stat-label">Incorrectas</span>
+        </div>
+        <div class="stat-card score">
+          <span class="stat-num" id="res-score">0%</span>
+          <span class="stat-label">Puntaje</span>
+        </div>
+      </div>
+      <div class="results-verse-text" id="results-verse-text"></div>
+      <div class="results-btns">
+        <button class="btn-primary" id="btn-retry">Intentar de nuevo</button>
+        <button class="btn-secondary" id="btn-home-from-results">Inicio</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SCRIPTS ── -->
+  
+  
+  
+  
+  
+  
+<script>/* ══════════════════════════════════════════
+   DATA.JS – Versículos y tokens falsos
+   ══════════════════════════════════════════ */
+
+const VERSES = [
+  {
+    ref: 'Romanos 5:1',
+    text: 'Justificados, pues, por la fe, tenemos paz para con Dios por medio de nuestro Señor Jesucristo'
+  },
+  {
+    ref: 'Romanos 10:17',
+    text: 'Así que la fe es por el oír, y el oír, por la palabra de Dios.'
+  },
+  {
+    ref: 'Hebreos 12:14',
+    text: 'Seguid la paz con todos, y la santidad, sin la cual nadie verá al Señor.'
+  },
+  {
+    ref: 'Hebreos 12:1',
+    text: 'Por tanto, nosotros también, teniendo en derredor nuestro tan grande nube de testigos, despojémonos de todo peso y del pecado que nos asedia, y corramos con paciencia la carrera que tenemos por delante'
+  },
+  {
+    ref: '2 Corintios 7:1',
+    text: 'Así que, amados, puesto que tenemos tales promesas, limpiémonos de toda contaminación de carne y de espíritu, perfeccionando la santidad en el temor de Dios.'
+  },
+  {
+    ref: '1 Pedro 2:2',
+    text: 'desead, como niños recién nacidos, la leche espiritual no adulterada, para que por ella crezcáis para salvación'
+  },
+  {
+    ref: 'Salmos 119:105',
+    text: 'Lámpara es a mis pies tu palabra, Y lumbrera a mi camino.'
+  }
+];
+
+// Fake word tokens (palabras)
+const FAKE_WORDS = [
+  'reposo', 'concordia', 'confianza', 'creer', 'confiar',
+  'Señor', 'Jehová', 'Cristo', 'entrada', 'favor',
+  'estar', 'firme', 'escuchar', 'mandamiento', 'dicho',
+  'ley', 'santificación', 'quitar', 'carga', 'maldad',
+  'andar', 'perseverancia', 'purificar', 'contaminación', 'lumbrera'
+];
+
+// Fake number tokens (números)
+const FAKE_NUMBERS = [
+  '28', '17', '6', '119', '20', '3', '105', '14', '2',
+  '23', '15', '5', '11', '7', '24', '10', '22', '12',
+  '26', '8', '16', '9', '4', '19', '13', '1', '512',
+  '347', '864', '291', '735'
+];
+
+// Roulette color palette per slice
+const ROULETTE_COLORS = [
+  '#7c3aed', // violet
+  '#db2777', // pink
+  '#0891b2', // cyan
+  '#d97706', // amber
+  '#15803d', // green
+  '#9333ea', // purple
+  '#b45309', // brown-amber
+];
+/* ══════════════════════════════════════════
+   TOKENIZER.JS – Text processing utils
+   ══════════════════════════════════════════ */
+
+const Tokenizer = (() => {
+
+  /**
+   * Build full text = "Ref Text" (reference + verse text)
+   * Returns { fullText, cleanTokens, originalText }
+   * cleanTokens: array without punctuation/symbols, used for exercises
+   * originalText: the reference + verse text for display (with original punctuation)
+   */
+  function buildVerseData(verse) {
+    // Full reference string → clean tokens (book can be "Romanos", "2 Corintios", etc.)
+    const fullText = `${verse.ref} ${verse.text}`;
+    const cleanTokens = tokenize(fullText);
+    return {
+      fullText,
+      cleanTokens,
+      originalText: verse.text,
+      ref: verse.ref
+    };
+  }
+
+  /**
+   * Remove punctuation and split by spaces → string[]
+   * Special case: colons between digits (e.g. "5:1") are treated as separators
+   */
+  function tokenize(str) {
+    // Replace colons between digits with a space (handles verse refs like 5:1, 119:105)
+    let clean = str.replace(/(\d):(\d)/g, '$1 $2');
+    // Remove ALL punctuation / symbols except word chars, digits, spaces
+    // Keep diacritics (Spanish accented chars)
+    clean = clean.replace(/[.,;:¿?¡!"""''()\[\]{}…–—\/\\*#@&^%$+=~`|<>]/g, '');
+    return clean.split(/\s+/).filter(t => t.length > 0);
+  }
+
+  /**
+   * Is a token numeric?
+   */
+  function isNumber(token) {
+    return /^\d+$/.test(token);
+  }
+
+  /**
+   * Get N distinct random fake tokens of the correct type
+   * (word fakes for word tokens, number fakes for number tokens)
+   */
+  function getFakes(token, count, alreadyUsed = []) {
+    const pool = isNumber(token) ? [...FAKE_NUMBERS] : [...FAKE_WORDS];
+    const available = pool.filter(f => !alreadyUsed.includes(f) && f !== token);
+    shuffle(available);
+    return available.slice(0, count);
+  }
+
+  /**
+   * Get N fakes matching the same numeric/word type
+   * Used when picking fakes that are all the same type as the token
+   */
+  function getFakesForTokens(tokens, count, alreadyUsed = []) {
+    const hasNum  = tokens.some(isNumber);
+    const hasWord = tokens.some(t => !isNumber(t));
+
+    let pool = [];
+    if (hasNum)  pool = pool.concat(FAKE_NUMBERS.filter(f => !alreadyUsed.includes(f)));
+    if (hasWord) pool = pool.concat(FAKE_WORDS.filter(f => !alreadyUsed.includes(f) && !tokens.includes(f)));
+    shuffle(pool);
+    return pool.slice(0, count);
+  }
+
+  /**
+   * Fisher-Yates shuffle (in-place)
+   */
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  /**
+   * Pick N distinct random indices from [0, max)
+   */
+  function pickIndices(max, count) {
+    const indices = Array.from({ length: max }, (_, i) => i);
+    shuffle(indices);
+    return indices.slice(0, Math.min(count, max));
+  }
+
+  /**
+   * Rebuild display text from tokens keeping original punctuation around tokens.
+   * For display in "verdadero o falso" we reconstruct from original fullText
+   * swapping certain tokens.
+   * We do a word-by-word replacement using the cleanToken array as a guide.
+   */
+  function reconstructWithSwap(cleanTokens, fullText, swapMap) {
+    // swapMap: { originalIndex → replacementString }
+    let result = fullText;
+    // We'll replace tokens in their original text positions carefully
+    // Simpler approach: rebuild from clean tokens with swaps, then rejoin
+    const rebuilt = cleanTokens.map((tok, i) => swapMap[i] !== undefined ? swapMap[i] : tok);
+    // Now re-insert punctuation from original
+    return reinsertPunctuation(fullText, cleanTokens, rebuilt);
+  }
+
+  /**
+   * Re-insert original punctuation when rebuilding display text.
+   * Strategy: scan fullText, match each "word" (non-punctuation run) to its clean token,
+   * and replace it with the rebuilt token.
+   */
+  function reinsertPunctuation(fullText, origTokens, newTokens) {
+    let tokenIdx = 0;
+    // Split preserving delimiters
+    const result = fullText.replace(/([A-Za-zÀ-ÖØ-öø-ÿ\d]+)/g, (match) => {
+      if (tokenIdx < origTokens.length && origTokens[tokenIdx] === match) {
+        const replacement = newTokens[tokenIdx] !== undefined ? newTokens[tokenIdx] : match;
+        tokenIdx++;
+        return replacement;
+      }
+      return match;
+    });
+    return result;
+  }
+
+  return {
+    buildVerseData,
+    tokenize,
+    isNumber,
+    getFakes,
+    getFakesForTokens,
+    shuffle,
+    pickIndices,
+    reconstructWithSwap
+  };
+})();
+/* ══════════════════════════════════════════
+   EXERCISES.JS – Exercise generators
+   ══════════════════════════════════════════ */
+
+const ExerciseEngine = (() => {
+
+  // ── Helpers ──────────────────────────────
+  const { shuffle, pickIndices, getFakes, isNumber, buildVerseData } = Tokenizer;
+
+  function rand(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function pickN(arr, n) {
+    const copy = [...arr];
+    shuffle(copy);
+    return copy.slice(0, n);
+  }
+
+  /**
+   * Build verse display string with blanks replaced by underscores / tokens
+   * Returns HTML string for display
+   * blankedIndices: indices in cleanTokens to blank
+   * showOriginalPunct: use original fullText to rebuild with blanks
+   */
+  function buildDisplayWithBlanks(verseData, blankedIndices, inputTag = false) {
+    // Re-build from fullText replacing tokens at blankedIndices with blanks
+    // We need to tokenize the fullText in sync with cleanTokens
+    const { cleanTokens, fullText } = verseData;
+    let tokIdx = 0;
+    let html = '';
+    let i = 0;
+
+    while (i < fullText.length) {
+      const ch = fullText[i];
+
+      // Start of a token (letter or digit)?
+      if (/[A-Za-zÀ-ÖØ-öø-ÿ\d]/.test(ch)) {
+        // Collect full run of alphanumeric chars
+        let raw = '';
+        let start = i;
+        while (i < fullText.length && /[A-Za-zÀ-ÖØ-öø-ÿ\d]/.test(fullText[i])) {
+          raw += fullText[i];
+          i++;
+        }
+        // Check if the next char is ':' followed by digit (verse ref like "5:1")
+        // In that case, we have TWO tokens in this raw segment after tokenization
+        // cleanTokens already split them; we emit them separately
+        if (fullText[i] === ':' && i + 1 < fullText.length && /\d/.test(fullText[i + 1])) {
+          // Emit first part (e.g. "5")
+          html += emitToken(raw, tokIdx, blankedIndices, inputTag);
+          tokIdx++;
+          html += ':'; // keep colon for display
+          i++;   // skip ':'
+          // Collect second part (e.g. "1")
+          let raw2 = '';
+          while (i < fullText.length && /\d/.test(fullText[i])) {
+            raw2 += fullText[i];
+            i++;
+          }
+          html += emitToken(raw2, tokIdx, blankedIndices, inputTag);
+          tokIdx++;
+        } else {
+          html += emitToken(raw, tokIdx, blankedIndices, inputTag);
+          tokIdx++;
+        }
+      } else {
+        html += escapeHtml(ch);
+        i++;
+      }
+    }
+    return html;
+  }
+
+  function emitToken(word, tokIdx, blankedIndices, inputTag) {
+    if (blankedIndices.includes(tokIdx)) {
+      const len = Math.max(word.length, 4);
+      if (inputTag) {
+        return `<input class="blank-input" data-idx="${tokIdx}" data-correct="${word}" size="${len}" autocomplete="off" spellcheck="false" placeholder="?" />`;
+      } else {
+        return `<span class="blank" data-idx="${tokIdx}" data-correct="${word}">${'_'.repeat(len)}</span>`;
+      }
+    }
+    return escapeHtml(word);
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /**
+   * Build token-block spans for drag exercises
+   */
+  function buildTokenBlocks(cleanTokens, selectedIndices = []) {
+    return cleanTokens.map((tok, i) => {
+      const cls = isNumber(tok) ? 'num' : 'word';
+      const isDraggable = selectedIndices.length === 0 || selectedIndices.includes(i);
+      return { tok, idx: i, cls, draggable: isDraggable };
+    });
+  }
+
+  // ── Exercise builders ─────────────────────
+
+  // EX 1 – Write 1 word
+  function ex_write1(vd) {
+    const [bIdx] = pickIndices(vd.cleanTokens.length, 1);
+    const correct = vd.cleanTokens[bIdx];
+    return {
+      type: 'write',
+      label: 'Escribe la palabra que falta',
+      instruction: 'Completa el versículo escribiendo el término que falta.',
+      html: buildDisplayWithBlanks(vd, [bIdx], true),
+      blankedIndices: [bIdx],
+      blankedTokens: [correct],
+      validate(inputs) {
+        const val = inputs[0].value.trim();
+        return { ok: normalize(val) === normalize(correct), correctAnswers: [correct] };
+      }
+    };
+  }
+
+  // EX 2 – Choose 1 word (4 options: 3 fake + 1 real)
+  function ex_choose1(vd) {
+    const [bIdx] = pickIndices(vd.cleanTokens.length, 1);
+    const correct = vd.cleanTokens[bIdx];
+    const fakes = getFakes(correct, 3);
+    const options = shuffle([correct, ...fakes]);
+    return {
+      type: 'choice',
+      label: 'Elige la opción correcta',
+      instruction: 'Selecciona la palabra o número que completa el versículo.',
+      html: buildDisplayWithBlanks(vd, [bIdx], false),
+      options,
+      correct,
+      blankedIndices: [bIdx],
+      validate(selected) {
+        return { ok: normalize(selected) === normalize(correct), correctAnswers: [correct] };
+      }
+    };
+  }
+
+  // EX 3 – Drag 1 token to its place
+  function ex_drag1(vd) {
+    const [bIdx] = pickIndices(vd.cleanTokens.length, 1);
+    return buildDragExercise(vd, [bIdx], 'Arrastra la pieza a su lugar correcto.');
+  }
+
+  // EX 4 – Find 1 intruder
+  function ex_intruder1(vd) {
+    return buildIntruderExercise(vd, 1, 'Haz clic sobre la palabra intrusa que NO pertenece al versículo.');
+  }
+
+  // EX 5 – True or False (synonym swap)
+  function ex_tf1(vd) {
+    return buildTFExercise(vd, 'Indica si el versículo está correcto o si tiene una palabra cambiada.');
+  }
+
+  // EX 6 – Write 2 words
+  function ex_write2(vd) {
+    return buildWriteExercise(vd, 2, 'Escribe las dos palabras o números que faltan.');
+  }
+
+  // EX 7 – Choose 2 words (5 options: 2 real + 3 fake)
+  function ex_choose2(vd) {
+    return buildChoose2Exercise(vd, 'Selecciona las dos palabras o números correctos.');
+  }
+
+  // EX 8 – Drag 2 tokens
+  function ex_drag2(vd) {
+    const chosen = pickIndices(vd.cleanTokens.length, 2);
+    return buildDragExercise(vd, chosen, 'Arrastra las dos piezas a sus lugares correctos.');
+  }
+
+  // EX 9 – Find 2 intruders
+  function ex_intruder2(vd) {
+    return buildIntruderExercise(vd, 2, 'Elimina los dos intrusos que NO pertenecen al versículo.');
+  }
+
+  // EX 10 – True or False
+  function ex_tf2(vd) {
+    return buildTFExercise(vd, 'Indica si el versículo es verdadero o tiene alguna palabra cambiada.');
+  }
+
+  // EX 11 – Write 3 words (20s timer)
+  function ex_write3_20(vd) {
+    return buildWriteExercise(vd, 3, 'Escribe los tres elementos que faltan. ¡Tienes 20 segundos!');
+  }
+
+  // EX 12 – Choose 2 words, 5 options (20s)
+  function ex_choose2_20(vd) {
+    return buildChoose2Exercise(vd, '¡Con el tiempo encima! Selecciona los dos términos correctos.');
+  }
+
+  // EX 13 – Drag 3 tokens (20s)
+  function ex_drag3_20(vd) {
+    const chosen = pickIndices(vd.cleanTokens.length, 3);
+    return buildDragExercise(vd, chosen, 'Coloca las tres piezas en su lugar. ¡20 segundos!');
+  }
+
+  // EX 14 – Find 3 intruders (20s)
+  function ex_intruder3_20(vd) {
+    return buildIntruderExercise(vd, 3, 'Elimina los tres intrusos antes de que se acabe el tiempo.');
+  }
+
+  // EX 15 – True or False (20s)
+  function ex_tf3_20(vd) {
+    return buildTFExercise(vd, '¿Verdadero o Falso? ¡Solo tienes 20 segundos!');
+  }
+
+  // EX 16 – Write 3 words (10s)
+  function ex_write3_10(vd) {
+    return buildWriteExercise(vd, 3, 'Escribe los tres elementos. ¡Solo 10 segundos!');
+  }
+
+  // EX 17 – Choose 2 words (10s)
+  function ex_choose2_10(vd) {
+    return buildChoose2Exercise(vd, 'Selecciona los dos términos correctos. ¡10 segundos!');
+  }
+
+  // EX 18 – Drag 3 tokens (10s)
+  function ex_drag3_10(vd) {
+    const chosen = pickIndices(vd.cleanTokens.length, 3);
+    return buildDragExercise(vd, chosen, 'Arrastra las tres piezas. ¡10 segundos!');
+  }
+
+  // EX 19 – Find 3 intruders (10s)
+  function ex_intruder3_10(vd) {
+    return buildIntruderExercise(vd, 3, 'Elimina los tres intrusos. ¡Velocidad máxima!');
+  }
+
+  // EX 20 – True or False (10s)
+  function ex_tf4_10(vd) {
+    return buildTFExercise(vd, '¿El versículo es correcto? ¡10 segundos para decidir!');
+  }
+
+  // ── Shared builders ───────────────────────
+
+  function buildWriteExercise(vd, count, instruction) {
+    const blankedIndices = pickIndices(vd.cleanTokens.length, count);
+    const blankedTokens = blankedIndices.map(i => vd.cleanTokens[i]);
+    return {
+      type: 'write',
+      label: `Escribe ${count > 1 ? `las ${count} palabras` : 'la palabra'} que falta${count > 1 ? 'n' : ''}`,
+      instruction,
+      html: buildDisplayWithBlanks(vd, blankedIndices, true),
+      blankedIndices,
+      blankedTokens,
+      validate(inputs) {
+        let allOk = true;
+        inputs.forEach((inp, i) => {
+          const ok = normalize(inp.value.trim()) === normalize(blankedTokens[i]);
+          if (!ok) allOk = false;
+        });
+        return { ok: allOk, correctAnswers: blankedTokens };
+      }
+    };
+  }
+
+  function buildChoose2Exercise(vd, instruction) {
+    const chosen = pickIndices(vd.cleanTokens.length, 2);
+    const correctTokens = chosen.map(i => vd.cleanTokens[i]);
+    // 3 fakes — mix word and number fakes based on types
+    const fakeWords = getFakes(correctTokens[0], 2, correctTokens);
+    const fakeNum   = getFakes(correctTokens[1], 1, [...correctTokens, ...fakeWords]);
+    const fakes = shuffle([...fakeWords, ...fakeNum]).slice(0, 3);
+    const allOptions = shuffle([...correctTokens, ...fakes]);
+    return {
+      type: 'multi-choice',
+      label: 'Elige los términos correctos',
+      instruction,
+      html: buildDisplayWithBlanks(vd, chosen, false),
+      options: allOptions,
+      correctTokens,
+      blankedIndices: chosen,
+      validate(selected) {
+        const ok = selected.length === 2 &&
+          correctTokens.every(c => selected.some(s => normalize(s) === normalize(c)));
+        return { ok, correctAnswers: correctTokens };
+      }
+    };
+  }
+
+  function buildDragExercise(vd, targetIndices, instruction) {
+    const { cleanTokens, fullText } = vd;
+    // Build phrase tokens KEEPING punctuation from original
+    // Phrase = array of {tok, origIdx, isPunct?, isSpace?}
+    const phraseTokens = buildPhraseWithPunct(fullText, cleanTokens);
+
+    // Remove target tokens from phrase
+    const displaced = targetIndices.map(i => ({ tok: cleanTokens[i], origIdx: i }));
+
+    return {
+      type: 'drag',
+      label: 'Arrastra la pieza a su lugar',
+      instruction,
+      phraseTokens,
+      displaced,
+      targetIndices,
+      cleanTokens: [...cleanTokens],
+      validate(currentOrder) {
+        // currentOrder: array of cleanTokens in their current position (after drag)
+        let allOk = true;
+        for (let i = 0; i < targetIndices.length; i++) {
+          if (normalize(currentOrder[targetIndices[i]]) !== normalize(cleanTokens[targetIndices[i]])) {
+            allOk = false;
+            break;
+          }
+        }
+        return { ok: allOk, correctAnswers: displaced.map(d => d.tok) };
+      }
+    };
+  }
+
+  function buildIntruderExercise(vd, count, instruction) {
+    const { cleanTokens } = vd;
+    // Get `count` fake tokens
+    const intruderFakes = [];
+    const usedFakes = [];
+    for (let k = 0; k < count; k++) {
+      const fakePool = [
+        ...FAKE_WORDS.filter(f => !cleanTokens.includes(f) && !usedFakes.includes(f)),
+        ...FAKE_NUMBERS.filter(f => !cleanTokens.includes(f) && !usedFakes.includes(f))
+      ];
+      shuffle(fakePool);
+      const fake = fakePool[0] || `intruso${k}`;
+      intruderFakes.push(fake);
+      usedFakes.push(fake);
+    }
+
+    // Insert intruders at random positions
+    const allTokens = [...cleanTokens];
+    const intruderPositions = [];
+    for (const fake of intruderFakes) {
+      const pos = Math.floor(Math.random() * (allTokens.length + 1));
+      allTokens.splice(pos, 0, fake);
+      intruderPositions.push(pos);
+    }
+
+    return {
+      type: 'intruder',
+      label: `Elimina ${count > 1 ? `los ${count} intrusos` : 'el intruso'}`,
+      instruction,
+      allTokens,
+      intruderFakes,
+      count,
+      validate(eliminated) {
+        const allFound = intruderFakes.every(f =>
+          eliminated.some(e => normalize(e) === normalize(f))
+        );
+        const noFalsePositives = eliminated.every(e =>
+          intruderFakes.some(f => normalize(f) === normalize(e))
+        );
+        return {
+          ok: allFound && noFalsePositives && eliminated.length === count,
+          correctAnswers: intruderFakes
+        };
+      }
+    };
+  }
+
+  function buildTFExercise(vd, instruction) {
+    const { cleanTokens, fullText } = vd;
+    // Choose 1 random token to potentially swap
+    const [tIdx] = pickIndices(cleanTokens.length, 1);
+    const original = cleanTokens[tIdx];
+    const fakes = getFakes(original, 3);
+    const useSwap = Math.random() < 0.5;
+    const replacement = useSwap ? rand(fakes) : original;
+
+    // Rebuild fullText with replacement
+    let displayText = fullText;
+    if (useSwap) {
+      // Replace original token in fullText
+      const regex = new RegExp(`(?<![A-Za-zÀ-ÖØ-öø-ÿ])${escapeRegex(original)}(?![A-Za-zÀ-ÖØ-öø-ÿ])`, '');
+      displayText = fullText.replace(regex, replacement);
+    }
+
+    const isTrue = !useSwap;
+    return {
+      type: 'tf',
+      label: 'Verdadero o Falso',
+      instruction,
+      displayText,
+      isTrue,
+      swapped: useSwap ? { original, replacement } : null,
+      validate(answer) {
+        const ok = (answer === 'true') === isTrue;
+        return {
+          ok,
+          correctAnswers: isTrue
+            ? ['Verdadero — el versículo está correcto']
+            : [`Falso — "${replacement}" debería ser "${original}"`]
+        };
+      }
+    };
+  }
+
+  // ── Punct-aware phrase builder ────────────
+  function buildPhraseWithPunct(fullText, cleanTokens) {
+    const result = [];
+    let tokIdx = 0;
+    let i = 0;
+    while (i < fullText.length) {
+      if (/[A-Za-zÀ-ÖØ-öø-ÿ\d]/.test(fullText[i])) {
+        let word = '';
+        while (i < fullText.length && /[A-Za-zÀ-ÖØ-öø-ÿ\d]/.test(fullText[i])) {
+          word += fullText[i++];
+        }
+        // Check for colon-digit (verse ref split)
+        if (fullText[i] === ':' && i + 1 < fullText.length && /\d/.test(fullText[i + 1])) {
+          result.push({ type: 'token', tok: word, origIdx: tokIdx });
+          tokIdx++;
+          result.push({ type: 'punct', tok: ':' });
+          i++; // skip ':'
+          let word2 = '';
+          while (i < fullText.length && /\d/.test(fullText[i])) {
+            word2 += fullText[i++];
+          }
+          result.push({ type: 'token', tok: word2, origIdx: tokIdx });
+          tokIdx++;
+        } else {
+          result.push({ type: 'token', tok: word, origIdx: tokIdx });
+          tokIdx++;
+        }
+      } else {
+        result.push({ type: 'punct', tok: fullText[i] });
+        i++;
+      }
+    }
+    return result;
+  }
+
+  // ── String utils ──────────────────────────
+  function normalize(s) {
+    return s.trim().toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  function escapeRegex(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  // ── Exercise sequence ─────────────────────
+  const EXERCISE_DEFS = [
+    { fn: ex_write1,       timer: 0  },  // 1
+    { fn: ex_choose1,      timer: 0  },  // 2
+    { fn: ex_drag1,        timer: 0  },  // 3
+    { fn: ex_intruder1,    timer: 0  },  // 4
+    { fn: ex_tf1,          timer: 0  },  // 5
+    { fn: ex_write2,       timer: 0  },  // 6
+    { fn: ex_choose2,      timer: 0  },  // 7
+    { fn: ex_drag2,        timer: 0  },  // 8
+    { fn: ex_intruder2,    timer: 0  },  // 9
+    { fn: ex_tf2,          timer: 0  },  // 10
+    { fn: ex_write3_20,    timer: 20 },  // 11
+    { fn: ex_choose2_20,   timer: 20 },  // 12
+    { fn: ex_drag3_20,     timer: 20 },  // 13
+    { fn: ex_intruder3_20, timer: 20 },  // 14
+    { fn: ex_tf3_20,       timer: 20 },  // 15
+    { fn: ex_write3_10,    timer: 10 },  // 16
+    { fn: ex_choose2_10,   timer: 10 },  // 17
+    { fn: ex_drag3_10,     timer: 10 },  // 18
+    { fn: ex_intruder3_10, timer: 10 },  // 19
+    { fn: ex_tf4_10,       timer: 10 },  // 20
+  ];
+
+  function buildAll(verse) {
+    const vd = buildVerseData(verse);
+    return EXERCISE_DEFS.map((def, i) => {
+      const ex = def.fn(vd);
+      ex.number = i + 1;
+      ex.timer  = def.timer;
+      ex.verseData = vd;
+      return ex;
+    });
+  }
+
+  return { buildAll, normalize };
+})();
+/* ══════════════════════════════════════════
+   ROULETTE.JS – Canvas wheel logic
+   ══════════════════════════════════════════ */
+
+const Roulette = (() => {
+
+  let canvas, ctx;
+  let currentAngle = 0;
+  let spinning = false;
+  let animId = null;
+  let onDoneCallback = null;
+
+  const SLICE_COLORS = [
+    '#5b21b6','#db2777','#0891b2','#b45309',
+    '#15803d','#7c3aed','#9a3412'
+  ];
+  const TEXT_COLORS = [
+    '#fde68a','#fce7f3','#cffafe','#fef3c7',
+    '#dcfce7','#ede9fe','#ffedd5'
+  ];
+
+  function init(canvasEl, callback) {
+    canvas = canvasEl;
+    ctx = canvas.getContext('2d');
+    onDoneCallback = callback;
+    draw(currentAngle);
+  }
+
+  function draw(angle) {
+    const W = canvas.width;
+    const H = canvas.height;
+    const cx = W / 2;
+    const cy = H / 2;
+    const r  = cx - 6;
+    const n  = VERSES.length;
+    const sliceAngle = (2 * Math.PI) / n;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Outer ring shadow / glow
+    ctx.save();
+    ctx.shadowColor = 'rgba(168,85,247,0.6)';
+    ctx.shadowBlur  = 28;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r + 4, 0, 2 * Math.PI);
+    ctx.fillStyle = 'rgba(168,85,247,0.15)';
+    ctx.fill();
+    ctx.restore();
+
+    for (let i = 0; i < n; i++) {
+      const startA = angle + i * sliceAngle;
+      const endA   = startA + sliceAngle;
+
+      // Slice fill
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startA, endA);
+      ctx.closePath();
+
+      // Gradient per slice
+      const gx = cx + (r * 0.55) * Math.cos(startA + sliceAngle / 2);
+      const gy = cy + (r * 0.55) * Math.sin(startA + sliceAngle / 2);
+      const grad = ctx.createRadialGradient(cx, cy, r * 0.1, gx, gy, r * 0.75);
+      grad.addColorStop(0, lighten(SLICE_COLORS[i], 30));
+      grad.addColorStop(1, SLICE_COLORS[i]);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Slice border
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+
+      // Text
+      ctx.save();
+      const midA = startA + sliceAngle / 2;
+      ctx.translate(cx, cy);
+      ctx.rotate(midA);
+
+      const ref = VERSES[i].ref;
+      const parts = ref.split(' ');
+      const line1 = parts.slice(0, -1).join(' ');
+      const line2 = parts[parts.length - 1];
+      const textX = r * 0.54;
+
+      ctx.font = 'bold 13px Nunito, sans-serif';
+      ctx.fillStyle = TEXT_COLORS[i];
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(0,0,0,0.6)';
+      ctx.shadowBlur  = 4;
+
+      if (line1) {
+        ctx.fillText(line1, textX, -8);
+        ctx.font = 'bold 14px Nunito, sans-serif';
+        ctx.fillText(line2, textX, 10);
+      } else {
+        ctx.font = 'bold 14px Nunito, sans-serif';
+        ctx.fillText(line2, textX, 0);
+      }
+      ctx.restore();
+    }
+
+    // Center circle (decorative, button is HTML overlay)
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 42, 0, 2 * Math.PI);
+    ctx.fillStyle = '#0f0a2e';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.restore();
+
+    // Outer border ring
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function spin() {
+    if (spinning) return;
+    spinning = true;
+
+    const btn = document.getElementById('spin-btn');
+    btn.classList.add('spinning');
+
+    const n = VERSES.length;
+    const sliceAngle = (2 * Math.PI) / n;
+
+    // Random target slice (uniform)
+    const targetSlice = Math.floor(Math.random() * n);
+    // Extra spins: 5–9 full rotations + aligned to pointer (top = -π/2)
+    const extraSpins  = (5 + Math.floor(Math.random() * 4)) * 2 * Math.PI;
+    // Pointer is at top (angle = -π/2). We want targetSlice to stop at top.
+    // Angle to land: pointer at top means we need the center of the target slice at -π/2
+    // currentAngle + targetAngle = -π/2 - (targetSlice * sliceAngle + sliceAngle/2) + some wiggle
+    const wiggle = (Math.random() - 0.5) * sliceAngle * 0.6;
+    const targetAngle = extraSpins
+      + (-Math.PI / 2 - (targetSlice * sliceAngle + sliceAngle / 2) + wiggle - currentAngle);
+
+    const duration = 4500 + Math.random() * 1200; // ms
+    const startTime = performance.now();
+    const startAngle = currentAngle;
+
+    function easeOut(t) {
+      // Cubic ease out
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function frame(now) {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const easedT = easeOut(t);
+      currentAngle = startAngle + targetAngle * easedT;
+      draw(currentAngle);
+
+      if (t < 1) {
+        animId = requestAnimationFrame(frame);
+      } else {
+        currentAngle = startAngle + targetAngle;
+        draw(currentAngle);
+        spinning = false;
+        btn.classList.remove('spinning');
+        // Determine which slice ended up at the pointer
+        const selectedIdx = getSliceAtPointer(n, sliceAngle);
+        if (onDoneCallback) onDoneCallback(selectedIdx);
+      }
+    }
+
+    animId = requestAnimationFrame(frame);
+  }
+
+  function getSliceAtPointer(n, sliceAngle) {
+    // Pointer is at angle -π/2 (top). Normalize currentAngle.
+    const pointerAngle = -Math.PI / 2;
+    // Which slice is at the pointer?
+    let normalised = ((pointerAngle - currentAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    const idx = Math.floor(normalised / sliceAngle) % n;
+    return idx;
+  }
+
+  // ── Color utility ──
+  function lighten(hex, amount) {
+    const num = parseInt(hex.replace('#',''), 16);
+    const r = Math.min(255, (num >> 16) + amount);
+    const g = Math.min(255, ((num >> 8) & 0xff) + amount);
+    const b = Math.min(255, (num & 0xff) + amount);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  return { init, spin };
+})();
+/* ══════════════════════════════════════════
+   UI.JS – Card rendering & interaction
+   ══════════════════════════════════════════ */
+
+const UI = (() => {
+
+  const { normalize } = ExerciseEngine;
+  let _onSubmit = null;  // callback(result)
+
+  // ── Main renderer ─────────────────────────
+  function renderExercise(ex, onSubmit) {
+    _onSubmit = onSubmit;
+    const area = document.getElementById('card-area');
+    area.innerHTML = '';
+
+    const card = document.createElement('div');
+    card.className = 'ex-card';
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'ex-card-label';
+    labelEl.textContent = `Ejercicio ${ex.number} · ${ex.label}`;
+    card.appendChild(labelEl);
+
+    const instrEl = document.createElement('div');
+    instrEl.className = 'ex-card-instruction';
+    instrEl.textContent = ex.instruction;
+    card.appendChild(instrEl);
+
+    switch (ex.type) {
+      case 'write':       renderWrite(card, ex); break;
+      case 'choice':      renderChoice(card, ex); break;
+      case 'multi-choice':renderMultiChoice(card, ex); break;
+      case 'drag':        renderDrag(card, ex); break;
+      case 'intruder':    renderIntruder(card, ex); break;
+      case 'tf':          renderTF(card, ex); break;
+    }
+
+    area.appendChild(card);
+
+    // Focus first input
+    const firstInput = card.querySelector('input');
+    if (firstInput) setTimeout(() => firstInput.focus(), 80);
+  }
+
+  // ── WRITE ─────────────────────────────────
+  function renderWrite(card, ex) {
+    const verseEl = document.createElement('div');
+    verseEl.className = 'verse-display';
+    verseEl.innerHTML = ex.html;
+    card.appendChild(verseEl);
+
+    const btn = makeSubmitBtn('Comprobar');
+    card.appendChild(btn);
+
+    const inputs = [...verseEl.querySelectorAll('.blank-input')];
+
+    // Submit on Enter
+    inputs.forEach(inp => {
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') btn.click();
+      });
+    });
+
+    btn.addEventListener('click', () => {
+      if (inputs.some(i => i.value.trim() === '')) return;
+      const result = ex.validate(inputs);
+      lockInputs(inputs, result.ok, ex.blankedTokens);
+      btn.disabled = true;
+      _onSubmit(result);
+    });
+  }
+
+  function lockInputs(inputs, ok, correctTokens) {
+    inputs.forEach((inp, i) => {
+      const correct = normalize(inp.value.trim()) === normalize(correctTokens[i]);
+      inp.className = 'blank-input ' + (correct ? 'correct' : 'wrong');
+      inp.disabled = true;
+    });
+  }
+
+  // ── CHOICE (1 answer) ─────────────────────
+  function renderChoice(card, ex) {
+    const verseEl = document.createElement('div');
+    verseEl.className = 'verse-display';
+    verseEl.innerHTML = ex.html;
+    card.appendChild(verseEl);
+
+    const grid = document.createElement('div');
+    grid.className = 'options-grid';
+    card.appendChild(grid);
+
+    ex.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        if (grid.dataset.answered) return;
+        grid.dataset.answered = '1';
+        const result = ex.validate(opt);
+        btn.classList.add(result.ok ? 'selected-correct' : 'selected-wrong');
+        // Show correct if wrong
+        if (!result.ok) {
+          grid.querySelectorAll('.option-btn').forEach(b => {
+            if (normalize(b.textContent) === normalize(ex.correct)) {
+              b.classList.add('selected-correct');
+            }
+          });
+        }
+        grid.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+        _onSubmit(result);
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  // ── MULTI-CHOICE (2 answers) ──────────────
+  function renderMultiChoice(card, ex) {
+    const verseEl = document.createElement('div');
+    verseEl.className = 'verse-display';
+    verseEl.innerHTML = ex.html;
+    card.appendChild(verseEl);
+
+    const instrSub = document.createElement('div');
+    instrSub.style.cssText = 'font-size:.82rem;color:var(--c-text-dim);font-weight:700;';
+    instrSub.textContent = 'Selecciona 2 opciones correctas';
+    card.appendChild(instrSub);
+
+    const grid = document.createElement('div');
+    grid.className = 'options-grid';
+    card.appendChild(grid);
+
+    const selected = new Set();
+
+    ex.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => {
+        if (grid.dataset.answered) return;
+        if (selected.has(opt)) {
+          selected.delete(opt);
+          btn.classList.remove('selected-correct');
+        } else {
+          selected.add(opt);
+          btn.classList.add('selected-correct');
+        }
+        if (selected.size === 2) {
+          grid.dataset.answered = '1';
+          const result = ex.validate([...selected]);
+          // Visual feedback
+          grid.querySelectorAll('.option-btn').forEach(b => {
+            const isCorrect = ex.correctTokens.some(c => normalize(c) === normalize(b.textContent));
+            const wasSelected = selected.has(b.textContent);
+            b.disabled = true;
+            if (isCorrect) b.classList.add('selected-correct');
+            else if (wasSelected) { b.classList.remove('selected-correct'); b.classList.add('selected-wrong'); }
+          });
+          _onSubmit(result);
+        }
+      });
+      grid.appendChild(btn);
+    });
+
+    // Submit button for safety
+    const btn = makeSubmitBtn('Verificar selección');
+    btn.style.marginTop = '6px';
+    card.appendChild(btn);
+    btn.addEventListener('click', () => {
+      if (grid.dataset.answered || selected.size === 0) return;
+      grid.dataset.answered = '1';
+      const result = ex.validate([...selected]);
+      grid.querySelectorAll('.option-btn').forEach(b => {
+        const isCorrect = ex.correctTokens.some(c => normalize(c) === normalize(b.textContent));
+        const wasSelected = selected.has(b.textContent);
+        b.disabled = true;
+        if (isCorrect) b.classList.add('selected-correct');
+        else if (wasSelected) { b.classList.remove('selected-correct'); b.classList.add('selected-wrong'); }
+      });
+      btn.disabled = true;
+      _onSubmit(result);
+    });
+  }
+
+  // ── DRAG ──────────────────────────────────
+  function renderDrag(card, ex) {
+    // Phrase area
+    const phraseLabel = document.createElement('div');
+    phraseLabel.className = 'tray-label';
+    phraseLabel.textContent = 'Versículo — arrastra la pieza al lugar correcto';
+    card.appendChild(phraseLabel);
+
+    const phraseEl = document.createElement('div');
+    phraseEl.className = 'token-phrase';
+    phraseEl.id = 'drag-phrase';
+    card.appendChild(phraseEl);
+
+    // Tray
+    const trayLabel = document.createElement('div');
+    trayLabel.className = 'tray-label';
+    trayLabel.style.marginTop = '12px';
+    trayLabel.textContent = 'Piezas disponibles';
+    card.appendChild(trayLabel);
+
+    const trayEl = document.createElement('div');
+    trayEl.className = 'token-tray';
+    trayEl.id = 'drag-tray';
+    card.appendChild(trayEl);
+
+    // Submit
+    const btn = makeSubmitBtn('Verificar posición');
+    card.appendChild(btn);
+
+    // State: working copy of cleanTokens (without displaced ones)
+    // phraseTokens has ALL tokens + punct markers
+    // We build from ex.cleanTokens removing displaced indices
+    const { cleanTokens, targetIndices, displaced, phraseTokens } = ex;
+    // currentTokens: cleanTokens with displaced removed (compacted)
+    // We track positions as an array
+    let currentTokens = cleanTokens.map((tok, i) => ({
+      tok,
+      origIdx: i,
+      isDisplaced: targetIndices.includes(i)
+    })).filter(t => !t.isDisplaced).map(t => t.tok);
+
+    // Tray tokens (displaced)
+    const trayTokens = displaced.map(d => d.tok);
+
+    // Dragging state
+    let draggedTok = null;
+    let draggedFrom = null; // 'phrase' or 'tray'
+    let draggedIndex = null;
+
+    function rebuildPhrase() {
+      phraseEl.innerHTML = '';
+      phraseEl.appendChild(makeDropZone(0));
+      currentTokens.forEach((tok, idx) => {
+        const block = makeTokenBlock(tok, idx, 'phrase');
+        phraseEl.appendChild(block);
+        phraseEl.appendChild(makeDropZone(idx + 1));
+      });
+    }
+
+    function rebuildTray() {
+      trayEl.innerHTML = '';
+      trayTokens.forEach((tok, idx) => {
+        const block = makeTokenBlock(tok, idx, 'tray');
+        trayEl.appendChild(block);
+      });
+      // Auto-submit when all tokens placed
+      if (trayTokens.length === 0 && !btn.disabled) {
+        setTimeout(() => { if (!btn.disabled) btn.click(); }, 700);
+      }
+    }
+
+    function makeTokenBlock(tok, idx, source) {
+      const div = document.createElement('div');
+      div.className = 'token-block ' + (Tokenizer.isNumber(tok) ? 'num' : 'word');
+      div.textContent = tok;
+      div.draggable = true;
+
+      div.addEventListener('dragstart', e => {
+        draggedTok = tok;
+        draggedFrom = source;
+        draggedIndex = idx;
+        div.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      div.addEventListener('dragend', () => {
+        div.classList.remove('dragging');
+      });
+      return div;
+    }
+
+    function makeDropZone(insertIdx) {
+      const dz = document.createElement('div');
+      dz.className = 'drop-zone';
+      dz.dataset.insertIdx = insertIdx;
+
+      dz.addEventListener('dragover', e => {
+        e.preventDefault();
+        dz.classList.add('active');
+      });
+      dz.addEventListener('dragleave', () => dz.classList.remove('active'));
+      dz.addEventListener('drop', e => {
+        e.preventDefault();
+        dz.classList.remove('active');
+        if (draggedTok === null) return;
+        const insertAt = parseInt(dz.dataset.insertIdx);
+
+        if (draggedFrom === 'phrase') {
+          // Remove from phrase first
+          currentTokens.splice(draggedIndex, 1);
+          const newInsert = draggedIndex < insertAt ? insertAt - 1 : insertAt;
+          currentTokens.splice(newInsert, 0, draggedTok);
+        } else {
+          // From tray
+          trayTokens.splice(draggedIndex, 1);
+          currentTokens.splice(insertAt, 0, draggedTok);
+        }
+
+        draggedTok = null;
+        draggedFrom = null;
+        draggedIndex = null;
+        rebuildPhrase();
+        rebuildTray();
+      });
+      return dz;
+    }
+
+    // Tray also accepts drops back
+    trayEl.addEventListener('dragover', e => { e.preventDefault(); trayEl.style.borderColor = 'var(--c-purple)'; });
+    trayEl.addEventListener('dragleave', () => { trayEl.style.borderColor = ''; });
+    trayEl.addEventListener('drop', e => {
+      e.preventDefault();
+      trayEl.style.borderColor = '';
+      if (draggedTok === null) return;
+      if (draggedFrom === 'phrase') {
+        currentTokens.splice(draggedIndex, 1);
+        trayTokens.push(draggedTok);
+      }
+      draggedTok = null;
+      draggedFrom = null;
+      draggedIndex = null;
+      rebuildPhrase();
+      rebuildTray();
+    });
+
+    rebuildPhrase();
+    rebuildTray();
+
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      const finalOrder = [...currentTokens, ...trayTokens];
+      const result = ex.validate(finalOrder);
+      _onSubmit(result);
+    });
+  }
+
+  // ── INTRUDER ──────────────────────────────
+  function renderIntruder(card, ex) {
+    const phraseEl = document.createElement('div');
+    phraseEl.className = 'intruder-phrase';
+    card.appendChild(phraseEl);
+
+    const btn = makeSubmitBtn('Confirmar selección');
+    card.appendChild(btn);
+
+    const eliminated = [];
+
+    ex.allTokens.forEach((tok, i) => {
+      const span = document.createElement('span');
+      span.className = 'intruder-token ' + (Tokenizer.isNumber(tok) ? 'num' : 'word');
+      span.textContent = tok;
+      span.dataset.tok = tok;
+
+      span.addEventListener('click', () => {
+        if (phraseEl.dataset.answered) return;
+        if (span.classList.contains('eliminated')) {
+          // Toggle off
+          span.classList.remove('eliminated');
+          const idx = eliminated.indexOf(tok);
+          if (idx > -1) eliminated.splice(idx, 1);
+        } else {
+          span.classList.add('eliminated');
+          eliminated.push(tok);
+        }
+        // Auto-submit when required count reached
+        if (eliminated.length >= ex.count) {
+          phraseEl.dataset.answered = '1';
+          const result = ex.validate(eliminated);
+          btn.disabled = true;
+          // Visual: mark correct/wrong eliminations
+          phraseEl.querySelectorAll('.intruder-token').forEach(s => {
+            const isFake = ex.intruderFakes.some(f => normalize(f) === normalize(s.dataset.tok));
+            const wasElim = eliminated.some(e => normalize(e) === normalize(s.dataset.tok));
+            if (wasElim && !isFake) s.classList.add('wrong-elim');
+          });
+          _onSubmit(result);
+        }
+      });
+      phraseEl.appendChild(span);
+    });
+
+    btn.addEventListener('click', () => {
+      if (phraseEl.dataset.answered || eliminated.length === 0) return;
+      phraseEl.dataset.answered = '1';
+      const result = ex.validate(eliminated);
+      btn.disabled = true;
+      _onSubmit(result);
+    });
+  }
+
+  // ── TRUE / FALSE ──────────────────────────
+  function renderTF(card, ex) {
+    const verseEl = document.createElement('div');
+    verseEl.className = 'tf-verse';
+    verseEl.textContent = ex.displayText;
+    card.appendChild(verseEl);
+
+    const tfRow = document.createElement('div');
+    tfRow.className = 'tf-buttons';
+    card.appendChild(tfRow);
+
+    ['true', 'false'].forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'tf-btn ' + (val === 'true' ? 'true-btn' : 'false-btn');
+      btn.textContent = val === 'true' ? '✓ Verdadero' : '✗ Falso';
+      btn.addEventListener('click', () => {
+        if (tfRow.dataset.answered) return;
+        tfRow.dataset.answered = '1';
+        const result = ex.validate(val);
+        tfRow.querySelectorAll('.tf-btn').forEach(b => b.disabled = true);
+        btn.style.transform = 'scale(1.06)';
+        _onSubmit(result);
+      });
+      tfRow.appendChild(btn);
+    });
+  }
+
+  // ── Helper: submit button ─────────────────
+  function makeSubmitBtn(label) {
+    const btn = document.createElement('button');
+    btn.className = 'btn-submit';
+    btn.textContent = label;
+    return btn;
+  }
+
+  // ── Feedback overlay ──────────────────────
+  function showFeedback(ok, correctAnswers, onDone) {
+    const overlay = document.getElementById('feedback-overlay');
+    const icon    = document.getElementById('feedback-icon');
+    const msg     = document.getElementById('feedback-msg');
+    const ans     = document.getElementById('feedback-answer');
+
+    overlay.classList.remove('hidden');
+    icon.textContent = ok ? '🎉' : '😅';
+    msg.textContent  = ok ? '¡Correcto!' : 'Incorrecto';
+    msg.className    = 'feedback-msg ' + (ok ? 'correct' : 'wrong');
+    ans.innerHTML    = ok
+      ? '<strong>¡Muy bien!</strong> Sigue así.'
+      : `Respuesta correcta: <strong>${correctAnswers.join(', ')}</strong>`;
+
+    // Launch confetti if correct
+    if (ok) spawnConfetti();
+
+    setTimeout(() => {
+      overlay.classList.add('hidden');
+      onDone();
+    }, 2200);
+  }
+
+  // ── Confetti ──────────────────────────────
+  function spawnConfetti() {
+    const box = document.getElementById('feedback-box');
+    const colors = ['#ffd166','#ec4899','#a855f7','#14b8a6','#22c55e','#f97316'];
+    for (let i = 0; i < 18; i++) {
+      const dot = document.createElement('div');
+      dot.style.cssText = `
+        position:absolute;width:8px;height:8px;border-radius:50%;
+        background:${colors[i % colors.length]};
+        top:50%;left:${10 + Math.random() * 80}%;
+        animation: confettiDrop ${0.6 + Math.random() * 0.8}s ease forwards;
+        animation-delay:${Math.random() * 0.3}s;
+        pointer-events:none;
+      `;
+      box.appendChild(dot);
+      setTimeout(() => dot.remove(), 1400);
+    }
+  }
+
+  // ── Timer ─────────────────────────────────
+  let timerInterval = null;
+  const FULL_DASH = 188.5;
+
+  function startTimer(seconds, onExpired) {
+    stopTimer();
+    const wrap = document.getElementById('timer-wrap');
+    const ring = document.getElementById('timer-ring');
+    const num  = document.getElementById('timer-num');
+    wrap.classList.remove('hidden');
+    ring.classList.remove('urgent');
+    ring.style.strokeDashoffset = '0';
+    num.textContent = seconds;
+
+    let remaining = seconds;
+    timerInterval = setInterval(() => {
+      remaining--;
+      num.textContent = remaining;
+      const pct = remaining / seconds;
+      ring.style.strokeDashoffset = ((1 - pct) * FULL_DASH).toString();
+      if (remaining <= 5) {
+        ring.classList.add('urgent');
+        num.style.color = 'var(--c-red)';
+        num.style.animation = 'timerPulse .5s ease infinite';
+      }
+      if (remaining <= 0) {
+        stopTimer();
+        onExpired();
+      }
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    const wrap = document.getElementById('timer-wrap');
+    const num  = document.getElementById('timer-num');
+    wrap.classList.add('hidden');
+    if (num) { num.style.color = ''; num.style.animation = ''; }
+  }
+
+  return { renderExercise, showFeedback, startTimer, stopTimer };
+})();
+/* ══════════════════════════════════════════
+   APP.JS – Main controller
+   ══════════════════════════════════════════ */
+
+(function () {
+  'use strict';
+
+  // ── State ─────────────────────────────────
+  let exercises    = [];
+  let currentIdx   = 0;
+  let scoreCorrect = 0;
+  let scoreWrong   = 0;
+  let selectedVerse = null;
+  let answered     = false;
+
+  // ── DOM references ─────────────────────────
+  const screens = {
+    home:      document.getElementById('screen-home'),
+    exercises: document.getElementById('screen-exercises'),
+    results:   document.getElementById('screen-results'),
+  };
+
+  // ── Init ──────────────────────────────────
+  function init() {
+    spawnParticles();
+    bindButtons();
+
+    // Init roulette
+    Roulette.init(
+      document.getElementById('roulette-canvas'),
+      handleRouletteResult
+    );
+
+    // Spin button
+    const spinBtn = document.getElementById('spin-btn');
+    spinBtn.addEventListener('click', () => Roulette.spin());
+    spinBtn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') Roulette.spin();
+    });
+  }
+
+  // ── Buttons ───────────────────────────────
+  function bindButtons() {
+    document.getElementById('btn-back-home').addEventListener('click', goHome);
+    document.getElementById('btn-home-from-results').addEventListener('click', goHome);
+    document.getElementById('btn-retry').addEventListener('click', () => {
+      if (selectedVerse) startGame(selectedVerse);
+    });
+  }
+
+  // ── Screen management ─────────────────────
+  function showScreen(name) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goHome() {
+    UI.stopTimer();
+    showScreen('home');
+    document.getElementById('roulette-result').classList.add('hidden');
+  }
+
+  // ── Roulette result ───────────────────────
+  function handleRouletteResult(idx) {
+    const verse = VERSES[idx];
+    selectedVerse = verse;
+
+    // Show result banner briefly
+    const resultEl = document.getElementById('roulette-result');
+    resultEl.classList.remove('hidden');
+    resultEl.innerHTML = `<h3>${verse.ref}</h3><p>${verse.text}</p>`;
+
+    // Redirect after 1.6s
+    setTimeout(() => {
+      resultEl.classList.add('hidden');
+      startGame(verse);
+    }, 1600);
+  }
+
+  // ── Game start ────────────────────────────
+  function startGame(verse) {
+    selectedVerse = verse;
+    exercises     = ExerciseEngine.buildAll(verse);
+    currentIdx    = 0;
+    scoreCorrect  = 0;
+    scoreWrong    = 0;
+    answered      = false;
+
+    updateScoreDisplay();
+    updateProgressDisplay();
+
+    document.getElementById('ex-verse-ref').textContent = verse.ref;
+
+    showScreen('exercises');
+    renderCurrentExercise();
+  }
+
+  // ── Render exercise ───────────────────────
+  function renderCurrentExercise() {
+    answered = false;
+    const ex = exercises[currentIdx];
+    updateProgressDisplay();
+
+    UI.stopTimer();
+
+    UI.renderExercise(ex, (result) => {
+      if (answered) return;
+      answered = true;
+      UI.stopTimer();
+      handleAnswer(result);
+    });
+
+    // Timer
+    if (ex.timer > 0) {
+      UI.startTimer(ex.timer, () => {
+        if (answered) return;
+        answered = true;
+        handleAnswer({ ok: false, correctAnswers: exercises[currentIdx].verseData?.cleanTokens || ['(tiempo agotado)'] });
+      });
+    }
+  }
+
+  // ── Handle answer ─────────────────────────
+  function handleAnswer(result) {
+    if (result.ok) scoreCorrect++;
+    else           scoreWrong++;
+    updateScoreDisplay();
+
+    // Clamp correctAnswers for display
+    const display = (result.correctAnswers || []).slice(0, 4);
+
+    UI.showFeedback(result.ok, display, () => {
+      currentIdx++;
+      if (currentIdx >= exercises.length) {
+        showResults();
+      } else {
+        renderCurrentExercise();
+      }
+    });
+  }
+
+  // ── Score & progress ──────────────────────
+  function updateScoreDisplay() {
+    document.getElementById('score-correct').textContent = scoreCorrect;
+    document.getElementById('score-wrong').textContent   = scoreWrong;
+  }
+
+  function updateProgressDisplay() {
+    const total = exercises.length;
+    const curr  = Math.min(currentIdx + 1, total);
+    document.getElementById('ex-counter').textContent = `${curr} / ${total}`;
+    const pct = ((currentIdx) / total * 100).toFixed(1);
+    document.getElementById('ex-progress-fill').style.width = `${pct}%`;
+  }
+
+  // ── Results ───────────────────────────────
+  function showResults() {
+    const total = exercises.length;
+    const pct   = Math.round((scoreCorrect / total) * 100);
+
+    document.getElementById('res-correct').textContent = scoreCorrect;
+    document.getElementById('res-wrong').textContent   = scoreWrong;
+    document.getElementById('res-score').textContent   = `${pct}%`;
+    document.getElementById('results-verse-ref').textContent = selectedVerse.ref;
+    document.getElementById('results-verse-text').textContent = selectedVerse.text;
+
+    // Trophy emoji based on score
+    const trophy = document.querySelector('.results-trophy');
+    if (pct >= 90)      trophy.textContent = '🏆';
+    else if (pct >= 70) trophy.textContent = '🥈';
+    else if (pct >= 50) trophy.textContent = '🥉';
+    else                trophy.textContent = '📖';
+
+    showScreen('results');
+  }
+
+  // ── Particles ─────────────────────────────
+  function spawnParticles() {
+    const container = document.getElementById('particles');
+    const colors = ['#a855f7','#ec4899','#ffd166','#14b8a6','#38bdf8','#22c55e'];
+    const sizes  = [4, 6, 8, 10, 14, 18];
+
+    for (let i = 0; i < 28; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'particle';
+      const size  = sizes[Math.floor(Math.random() * sizes.length)];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const left  = Math.random() * 100;
+      const dur   = 14 + Math.random() * 20;
+      const delay = Math.random() * 18;
+
+      dot.style.cssText = `
+        width:${size}px; height:${size}px;
+        background:${color};
+        left:${left}%;
+        --dur:${dur}s; --delay:${delay}s;
+        animation-delay:${delay}s;
+      `;
+      container.appendChild(dot);
+    }
+  }
+
+  // ── Boot ──────────────────────────────────
+  init();
+})();
+</script>
+</body>
+</html>

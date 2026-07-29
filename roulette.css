@@ -1,0 +1,143 @@
+/* ══════════════════════════════════════════
+   ROULETTE.CSS – Home screen & Wheel
+   ══════════════════════════════════════════ */
+
+/* ── Header ── */
+.home-header {
+  text-align: center;
+  padding: 40px 0 20px;
+}
+.home-logo {
+  font-size: 2.8rem;
+  color: var(--c-gold);
+  animation: spinGlow 6s linear infinite;
+  display: inline-block;
+  text-shadow: var(--shadow-glow-gold);
+}
+.home-title {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: 2px;
+  color: var(--c-text);
+  margin-top: 8px;
+}
+.home-title span {
+  background: linear-gradient(90deg, var(--c-gold), var(--c-pink), var(--c-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.home-subtitle {
+  font-size: 1rem;
+  color: var(--c-text-dim);
+  margin-top: 10px;
+  max-width: 340px;
+  margin-inline: auto;
+  line-height: 1.5;
+}
+
+/* ── Roulette wrapper ── */
+.roulette-wrapper {
+  position: relative;
+  width: min(420px, 90vw);
+  height: min(420px, 90vw);
+  margin: 28px auto 24px;
+}
+
+/* Ambient glow behind wheel */
+.roulette-glow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,85,247,.25) 0%, transparent 70%);
+  animation: pulseGlow 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Canvas wheel */
+#roulette-canvas {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  filter: drop-shadow(0 0 24px rgba(168,85,247,.5));
+}
+
+/* Center spin button */
+.roulette-center-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff 0%, var(--c-gold) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0,0,0,.6), 0 0 0 4px rgba(255,255,255,.15);
+  transition: transform .15s, box-shadow .15s;
+  user-select: none;
+  z-index: 10;
+}
+.roulette-center-btn:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 6px 30px rgba(0,0,0,.7), 0 0 0 6px rgba(255,220,80,.3);
+}
+.roulette-center-btn.spinning {
+  pointer-events: none;
+  opacity: .7;
+}
+.spin-icon {
+  font-size: 1.3rem;
+  color: var(--c-bg);
+  line-height: 1;
+}
+.spin-label {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 900;
+  font-size: .62rem;
+  letter-spacing: 1.5px;
+  color: var(--c-bg);
+}
+
+/* Pointer arrow */
+.roulette-pointer {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: var(--c-gold);
+  text-shadow: 0 0 12px var(--c-gold);
+  animation: pointerBounce 1.2s ease-in-out infinite;
+  z-index: 20;
+}
+
+/* Result banner */
+.roulette-result {
+  text-align: center;
+  background: linear-gradient(135deg, var(--c-card), var(--c-card2));
+  border: 2px solid var(--c-gold);
+  border-radius: var(--radius-lg);
+  padding: 18px 28px;
+  max-width: 380px;
+  box-shadow: var(--shadow-glow-gold);
+  animation: slideUp .4s cubic-bezier(.34,1.56,.64,1);
+}
+.roulette-result h3 {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.3rem;
+  color: var(--c-gold);
+  letter-spacing: 1px;
+}
+.roulette-result p {
+  color: var(--c-text);
+  font-size: .9rem;
+  margin-top: 6px;
+  line-height: 1.5;
+}

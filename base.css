@@ -1,0 +1,145 @@
+/* ══════════════════════════════════════════
+   BASE.CSS – Variables · Reset · Layout
+   ══════════════════════════════════════════ */
+
+:root {
+  /* Palette – Vibrante + espiritual */
+  --c-bg:        #0f0a2e;
+  --c-surface:   #1a1247;
+  --c-card:      #211860;
+  --c-card2:     #2a1f78;
+
+  --c-gold:      #ffd166;
+  --c-gold-dark: #e8a000;
+  --c-purple:    #a855f7;
+  --c-violet:    #7c3aed;
+  --c-pink:      #ec4899;
+  --c-teal:      #14b8a6;
+  --c-sky:       #38bdf8;
+  --c-green:     #22c55e;
+  --c-red:       #ef4444;
+  --c-orange:    #f97316;
+
+  --c-text:      #f1f0ff;
+  --c-text-dim:  #9d95c9;
+  --c-border:    rgba(168,85,247,.25);
+
+  /* Sizing */
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-xl:   36px;
+
+  /* Shadows */
+  --shadow-glow-gold:   0 0 30px rgba(255,209,102,.35);
+  --shadow-glow-purple: 0 0 30px rgba(168,85,247,.35);
+  --shadow-card:        0 8px 32px rgba(0,0,0,.45);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Screens ── */
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0 16px 40px;
+  position: relative;
+  z-index: 1;
+}
+.screen.active { display: flex; }
+
+/* ── Particles background ── */
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .18;
+  animation: floatUp var(--dur, 12s) var(--delay, 0s) infinite linear;
+}
+
+/* ── Generic Button Styles ── */
+.btn-primary {
+  background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
+  color: #1a0a00;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 14px 32px;
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255,180,0,.4);
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,180,0,.5); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--c-text-dim);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 13px 28px;
+  border: 2px solid var(--c-border);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+}
+.btn-secondary:hover { border-color: var(--c-purple); color: var(--c-text); }
+
+/* ── Utility ── */
+.hidden { display: none !important; }
+
+/* ── Gradient text helper ── */
+.gradient-text {
+  background: linear-gradient(90deg, var(--c-gold), var(--c-pink), var(--c-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--c-surface); }
+::-webkit-scrollbar-thumb { background: var(--c-violet); border-radius: 99px; }
+
+/* ── Selection ── */
+::selection { background: rgba(168,85,247,.35); color: var(--c-text); }
+
+/* ── Focus outlines ── */
+:focus-visible {
+  outline: 2px solid var(--c-purple);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Star field decoration ── */
+#particles::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(124,58,237,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(236,72,153,.1) 0%, transparent 55%);
+  pointer-events: none;
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memoriza la Palabra · Versículos Bíblicos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Luckiest+Guy&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/roulette.css" />
+  <link rel="stylesheet" href="css/exercises.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+
+  <!-- ── PARTICLES BACKGROUND ── -->
+  <div id="particles" aria-hidden="true"></div>
+
+  <!-- ── SCREEN: HOME / ROULETTE ── -->
+  <section id="screen-home" class="screen active">
+    <header class="home-header">
+      <div class="home-logo">✦</div>
+      <h1 class="home-title">Memoriza<br/><span>la Palabra</span></h1>
+      <p class="home-subtitle">Gira la ruleta y pon a prueba tu memoria bíblica</p>
+    </header>
+
+    <div class="roulette-wrapper">
+      <div class="roulette-glow" aria-hidden="true"></div>
+      <canvas id="roulette-canvas" width="420" height="420" role="img" aria-label="Ruleta de versículos bíblicos"></canvas>
+      <div class="roulette-center-btn" id="spin-btn" role="button" tabindex="0" aria-label="Girar la ruleta">
+        <span class="spin-icon">▶</span>
+        <span class="spin-label">GIRAR</span>
+      </div>
+      <div class="roulette-pointer" aria-hidden="true">▼</div>
+    </div>
+
+    <div id="roulette-result" class="roulette-result hidden" aria-live="polite"></div>
+  </section>
+
+  <!-- ── SCREEN: EXERCISES ── -->
+  <section id="screen-exercises" class="screen">
+    <!-- Top bar -->
+    <div class="ex-topbar">
+      <button class="btn-home" id="btn-back-home" aria-label="Volver al inicio">⬅ Inicio</button>
+      <div class="ex-verse-ref" id="ex-verse-ref"></div>
+      <div class="ex-progress-wrap">
+        <span id="ex-counter">1 / 20</span>
+        <div class="ex-progress-bar"><div class="ex-progress-fill" id="ex-progress-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- Score bar -->
+    <div class="ex-scorebar">
+      <div class="score-pill correct"><span>✓</span><span id="score-correct">0</span></div>
+      <div class="score-pill wrong"><span>✗</span><span id="score-wrong">0</span></div>
+    </div>
+
+    <!-- Timer ring -->
+    <div class="timer-wrap hidden" id="timer-wrap" aria-live="polite">
+      <svg class="timer-svg" viewBox="0 0 72 72">
+        <circle class="timer-bg" cx="36" cy="36" r="30"/>
+        <circle class="timer-ring" id="timer-ring" cx="36" cy="36" r="30"
+                stroke-dasharray="188.5" stroke-dashoffset="0"/>
+      </svg>
+      <span class="timer-num" id="timer-num">20</span>
+    </div>
+
+    <!-- Card area -->
+    <div class="card-area" id="card-area"></div>
+
+    <!-- Feedback overlay -->
+    <div class="feedback-overlay hidden" id="feedback-overlay">
+      <div class="feedback-box" id="feedback-box">
+        <div class="feedback-icon" id="feedback-icon"></div>
+        <div class="feedback-msg" id="feedback-msg"></div>
+        <div class="feedback-answer" id="feedback-answer"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SCREEN: RESULTS ── -->
+  <section id="screen-results" class="screen">
+    <div class="results-wrap">
+      <div class="results-trophy">🏆</div>
+      <h2 class="results-title">¡Completado!</h2>
+      <div class="results-verse-ref" id="results-verse-ref"></div>
+      <div class="results-stats">
+        <div class="stat-card correct">
+          <span class="stat-num" id="res-correct">0</span>
+          <span class="stat-label">Correctas</span>
+        </div>
+        <div class="stat-card wrong">
+          <span class="stat-num" id="res-wrong">0</span>
+          <span class="stat-label">Incorrectas</span>
+        </div>
+        <div class="stat-card score">
+          <span class="stat-num" id="res-score">0%</span>
+          <span class="stat-label">Puntaje</span>
+        </div>
+      </div>
+      <div class="results-verse-text" id="results-verse-text"></div>
+      <div class="results-btns">
+        <button class="btn-primary" id="btn-retry">Intentar de nuevo</button>
+        <button class="btn-secondary" id="btn-home-from-results">Inicio</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SCRIPTS ── -->
+  <script src="js/data.js"></script>
+  <script src="js/tokenizer.js"></script>
+  <script src="js/exercises.js"></script>
+  <script src="js/roulette.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
